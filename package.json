@@ -1,0 +1,23 @@
+{
+  "name": "git-pre",
+  "version": "0.0.1",
+  "description": "Git pre-commit hooks",
+  "scripts": {
+    "install": "node install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gangleri/git-pre.git"
+  },
+  "keywords": [
+    "git",
+    "github",
+    "pre-commit"
+  ],
+  "author": "Alan Bradley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gangleri/git-pre/issues"
+  },
+  "homepage": "https://github.com/gangleri/git-pre"
+}
