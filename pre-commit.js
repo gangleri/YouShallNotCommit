@@ -3,12 +3,66 @@
 'use strict';
 
 var childProc = require('child_process');
+var path = require('path');
+var fs = require('fs');
+var colors = require('colors');
+
+colors.setTheme({
+  error: 'red'
+});
+
+function reportFailure(msg) {
+  console.log(msg);
+  console.log('Your pre-commit script has failed therfore your commit has failed.');
+  console.log('\nYou can skip running re-commit hooks using the -n (--no-verify) option');
+  console.log('\t $ git commit --no-verify');
+  console.log('This is ' + ('NOT').red.bold + 'advised!');
+
+  process.exit(1);
+}
 
 childProc.exec('git diff --cached --name-only', function(err, status) {
+  var cwd = process.cwd();
+
   if(err) {
-    console.log('Error: ' + err);
-    process.exit(1);
+    reportFailure('Error: '.error + err);
   }
 
-  console.log('>>>>' + status);
+  var changes = status.split('\n').map(function buildPackagePath(file) {
+    return path.join(cwd, path.dirname(file), 'package.json');
+  }).filter(function removeNonExistigFiles(elm) {
+    return fs.existsSync(elm);
+  }).reduce(function removeDuplicates(prev, curr) {
+    if(prev.indexOf(curr) < 0) {
+      prev.push(curr);
+    }
+    return prev;
+  }, []);
+
+
+  changes.forEach(function(pkgPath) {
+    var pkg = require(pkgPath);
+    var scripts = [];
+
+    if(pkg['pre-commit'] && Array.isArray(pkg['pre-commit'])) {
+      scripts = pkg['pre-commit'];
+
+      if(!scripts.length) {
+        reportFailure('No script to execute'.error);
+      }
+
+      scripts.forEach(function runScript(script) {
+        childProc.spawn('npm', ['run-script', script], {
+          cwd: cwd,
+          stdio: [0,1,2]
+        }).on('close', function checkScriptExit(code) {
+          if(code !== 0) {
+            process.exit(1);
+          }
+        });
+      });
+    }
+  });
+
 });
+

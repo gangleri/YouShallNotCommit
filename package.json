@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/gangleri/git-pre/issues"
   },
-  "homepage": "https://github.com/gangleri/git-pre"
+  "homepage": "https://github.com/gangleri/git-pre",
+  "dependencies": {
+    "colors": "^0.6.2"
+  }
 }
