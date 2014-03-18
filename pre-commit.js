@@ -5,11 +5,6 @@
 var childProc = require('child_process');
 var path = require('path');
 var fs = require('fs');
-var colors = require('colors');
-
-colors.setTheme({
-  error: 'red'
-});
 
 function reportFailure(msg) {
   console.log(msg);
@@ -25,7 +20,7 @@ childProc.exec('git diff --cached --name-only', function(err, status) {
   var cwd = process.cwd();
 
   if(err) {
-    reportFailure('Error: '.error + err);
+    reportFailure('Error: ' + err);
   }
 
   var changes = status.split('\n').map(function buildPackagePath(file) {
@@ -48,7 +43,7 @@ childProc.exec('git diff --cached --name-only', function(err, status) {
       scripts = pkg['pre-commit'];
 
       if(!scripts.length) {
-        reportFailure('No script to execute'.error);
+        reportFailure('No script to execute');
       }
 
       scripts.forEach(function runScript(script) {
