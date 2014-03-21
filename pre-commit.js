@@ -8,10 +8,9 @@ var fs = require('fs');
 
 function reportFailure(msg) {
   console.log(msg);
-  console.log('Your pre-commit script has failed therfore your commit has failed.');
   console.log('\nYou can skip running re-commit hooks using the -n (--no-verify) option');
   console.log('\t $ git commit --no-verify');
-  console.log('This is ' + ('NOT').red.bold + 'advised!');
+  console.log('This is NOT advised!');
 
   process.exit(1);
 }
