@@ -1,5 +1,5 @@
 {
-  "name": "git-pre",
+  "name": "YouShallNotCommit",
   "version": "0.0.1",
   "description": "Git pre-commit hooks",
   "scripts": {
