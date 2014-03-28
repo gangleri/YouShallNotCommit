@@ -6,29 +6,76 @@ var childProc = require('child_process');
 var path = require('path');
 var fs = require('fs');
 
+function displayError() {
+  console.log('');
+  console.log('');
+  console.log('                                   \x1B[34m-----');
+  console.log('                                 //////\\');
+  console.log('                              /////////\\');
+  console.log('                           //////////////\\');
+  console.log('                            //////////////\\');
+  console.log('                           //////////////\\\\');
+  console.log('                           //////////////\\\\\\');
+  console.log('                         ////////////////\\\\\\');
+  console.log('                       //////////////////\\\\\\');
+  console.log('                     ///////////////////\\\\\\\\');
+  console.log('                 /----//////////////////\\\\\\\\    ');
+  console.log('              /---/////////////////////-----\\');
+  console.log('            /----------------------------------\\');
+  console.log('          /-/////////////\x1B[39m   ___|  |___   \x1B[34m|-----------\\');
+  console.log('          |-///////////|\x1B[39m    ===|  |===   \x1B[34m|-----------|');
+  console.log('          \\-///////////|\x1B[39m   /__O|  |O__\\  \x1B[34m|-----------/');
+  console.log('           \\///////////|\x1B[39m    -- |  | --   \x1B[34m|----------/');
+  console.log('            -----------|\x1B[39m\\     {.  .}     /\x1B[34m----------\x1B[39m');
+  console.log('                         \\  /^^^^^^^^\\  /');
+  console.log('                          \\/^ ------ ^\\/');
+  console.log('                          |  ^     ^  ^|');
+  console.log('                          |^   ^  ^  ^ |');
+  console.log('                          | ^   ^  ^  ^|');
+  console.log('                          |^  ^  ^  ^  |');
+  console.log('                          \\  ^  ^  ^ ^ /');
+  console.log('                           \\  ^  ^  ^ /');
+  console.log('                            \\--------/');
+  console.log('');
+  console.log(' _                         _            _   _                    ');
+  console.log('(_|   |                   | |          | | | |                   ');
+  console.log('  |   |  __            ,  | |     __,  | | | |    _  _    __ _|_ ');
+  console.log('  |   | /  \\_|   |    / \\_|/ \\   /  |  |/  |/    / |/ |  /  \\_|  ');
+  console.log('   \\_/|/\\__/  \\_/|_/   \\/ |   |_/\\_/|_/|__/|__/    |  |_/\\__/ |_/');
+  console.log('     /|                                                          ');
+  console.log('     \\|                                                          ');
+  console.log('                                      ');
+  console.log('                                o     ');
+  console.log(' __   __   _  _  _    _  _  _     _|_ ');
+  console.log('/    /  \\_/ |/ |/ |  / |/ |/ |  |  |  ');
+  console.log('\\___/\\__/   |  |  |_/  |  |  |_/|_/|_/');
+  console.log('                                      ');
+}
+
 childProc.exec('git diff --cached --name-only', function(err, status) {
   var cwd = process.cwd();
   var prefix = '\x1B[30m\x1B[46m[git-pre]\x1B[49m\x1B[39m';
 
   if(err) {
-    console.log('[git-pre] Error: ' + err);
     process.exit(1);
   }
 
   var packages = status.split('\n').map(function buildPackagePath(file) {
-    return path.join(cwd, path.dirname(file), 'package.json');
-  }).filter(function removeNonExistigFiles(elm) {
-    return fs.existsSync(elm);
+    var parts = ['/'].concat(file.split('/'));
+    for(var i=parts.length; i>0;i--) {
+      var f = cwd + path.join.apply(path, parts.slice(0, i))+'/package.json';
+      if(fs.existsSync(f)) { return f; }
+    }
   }).reduce(function removeDuplicates(prev, curr) {
-    if(prev.indexOf(curr) < 0) {
+    if(prev.indexOf(curr) < 0 && fs.existsSync(curr)) {
       prev.push(curr);
     }
     return prev;
   }, []);
 
   function processPkg(pkgPath, results, cb) {
-    var pkg = require(pkgPath);
-    if(!pkg || !pkg['pre-commit']) {
+    var pkg;
+    if(!pkgPath || !(pkg = require(pkgPath)) || !pkg['pre-commit']) {
       results.exitCode = 1;
       cb(results);
     }
@@ -68,6 +115,7 @@ childProc.exec('git diff --cached --name-only', function(err, status) {
       });
 
       if(results.exitCode !== 0) {
+        displayError();
         console.log('\npre-commit hooks \x1B[31m\x1B[1mFAILED\x1B[22m\x1B[39m, your commit has been aborted. See above for details.');
         console.log('Correct the above failures or force the commit with: git commit --no-verify');
       }
