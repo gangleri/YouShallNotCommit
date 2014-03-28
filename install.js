@@ -1,11 +1,10 @@
 'use strict';
 
 var fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    gitPath = path.resolve('./', '../..');
 
 console.log('Installing git pre-commit hook');
-
-var gitPath = path.resolve('./', '../..');
 
 while(!fs.existsSync(gitPath + '/.git')) {
   if(gitPath === '/') {
