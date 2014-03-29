@@ -23,12 +23,12 @@ function displayError() {
   console.log('              /---/////////////////////-----\\');
   console.log('            /----------------------------------\\');
   console.log('          /-/////////////\x1B[39m   ___|  |___   \x1B[34m|-----------\\');
-  console.log('          |-///////////|\x1B[39m    ===|  |===   \x1B[34m|-----------|');
-  console.log('          \\-///////////|\x1B[39m   /__O|  |O__\\  \x1B[34m|-----------/');
+  console.log('          |-///////////|\x1B[39m    \x1B[90m===\x1B[39m|  |\x1B[90m===\x1B[90m   \x1B[34m|-----------|');
+  console.log('          \\-///////////|\x1B[39m   /__\x1B[32mO\x1B[39m|  |\x1B[32mO\x1B[39m__\\  \x1B[34m|-----------/');
   console.log('           \\///////////|\x1B[39m    -- |  | --   \x1B[34m|----------/');
   console.log('            -----------|\x1B[39m\\     {.  .}     /\x1B[34m----------\x1B[39m');
-  console.log('                         \\  /^^^^^^^^\\  /');
-  console.log('                          \\/^ ------ ^\\/');
+  console.log('                         \\  \x1B[90m/^^^^^^^^\\  /');
+  console.log('                          \\\x1B[90m/^ \x1B[31m------\x1B[39m \x1B[90m^\\/');
   console.log('                          |  ^     ^  ^|');
   console.log('                          |^   ^  ^  ^ |');
   console.log('                          | ^   ^  ^  ^|');
@@ -37,7 +37,7 @@ function displayError() {
   console.log('                           \\  ^  ^  ^ /');
   console.log('                            \\--------/');
   console.log('');
-  console.log(' _                         _            _   _                    ');
+  console.log(' \x1B[31m_                         _            _   _                    ');
   console.log('(_|   |                   | |          | | | |                   ');
   console.log('  |   |  __            ,  | |     __,  | | | |    _  _    __ _|_ ');
   console.log('  |   | /  \\_|   |    / \\_|/ \\   /  |  |/  |/    / |/ |  /  \\_|  ');
@@ -49,7 +49,7 @@ function displayError() {
   console.log(' __   __   _  _  _    _  _  _     _|_ ');
   console.log('/    /  \\_/ |/ |/ |  / |/ |/ |  |  |  ');
   console.log('\\___/\\__/   |  |  |_/  |  |  |_/|_/|_/');
-  console.log('                                      ');
+  console.log('                                      \x1B[39m');
 }
 
 childProc.exec('git diff --cached --name-only', function(err, status) {
